@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+
+	<!-- SETTINGS -->
+	<title prefix="" body="Root Page" suffix=" | HandBones" />
+	<tracker uid="UA-11057894-2" debug="false" />
+	<!-- <shell dispatchContextStartupComplete="true" /> -->
+	
+	<!-- ROOT ACTIONS -->
+	<action ref="HELLO_WORLD_BTN" gotoPageId="HELLO_WORLD_PAGE" >
+		<track category="LinkUsage" action="{ref}" label="{gotoPageId}" />
+	</action>
+	
+	<!-- COMMON ACTIONS -->
+	<action ref="GOTO_ROOT" changeAddress="/" >
+		<track category="LinkUsage" action="{ref}" label="CommonLink" />
+	</action>
+	
+	<!-- PAGES -->
+	<page id="HELLO_WORLD_PAGE" title="Hello World" address="HelloWorld" src="pages/HelloWorldPage.swf" >
+	</page>
+	
+	<!-- FOOTER LINKS -->
+	<action ref="FOOTER_BLOG" invokeUrl="http://www.matanuberstein.co.za" window="_blank">
+		<track category="LinkUsage" action="{ref}" label="{invokeUrl}" />
+	</action>
+	<action ref="FOOTER_ASDOC" invokeUrl="asdocs/index.html" window="_blank">
+		<track category="LinkUsage" action="{ref}" label="{invokeUrl}" />
+	</action>
+	<action ref="FOOTER_ROBOTLEGS" invokeUrl="http://www.robotlegs.org" window="_blank">
+		<track category="LinkUsage" action="{ref}" label="{invokeUrl}" />
+	</action>
+	
+</site>
