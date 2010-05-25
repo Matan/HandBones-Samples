@@ -12,7 +12,7 @@ package org.handbones.samples.site.view
 
 		[Inject]
 		public var view : Header;
-		
+
 		override public function onRegister() : void 
 		{
 			eventMap.mapListener(eventDispatcher, SizeEvent.RESIZE, resize_handler, SizeEvent);
@@ -21,7 +21,7 @@ package org.handbones.samples.site.view
 			
 			view.init();
 			
-			view.setVersion("0.1.7");
+			view.setVersion(settingsModel.data.handbones.@version);
 		}
 
 		override public function onRemove() : void 

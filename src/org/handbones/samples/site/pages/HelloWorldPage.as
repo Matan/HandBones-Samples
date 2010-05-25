@@ -1,7 +1,7 @@
 package org.handbones.samples.site.pages 
 {
-	import org.handbones.samples.site.pages.helloworld.HelloWorldCanvasMediator;
-	import org.handbones.samples.site.pages.helloworld.HelloWorldCanvas;
+	import org.handbones.samples.site.pages.helloworld.view.HelloWorldCanvas;
+	import org.handbones.samples.site.pages.helloworld.view.HelloWorldCanvasMediator;
 	import org.handbones.base.Page;
 
 	/**

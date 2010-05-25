@@ -6,8 +6,15 @@
 	<tracker uid="UA-11057894-2" debug="false" />
 	<!-- <shell dispatchContextStartupComplete="true" /> -->
 	
+	<data>
+		<handbones version="0.2.2" />
+	</data>
+	
 	<!-- ROOT ACTIONS -->
 	<action ref="HELLO_WORLD_BTN" gotoPageId="HELLO_WORLD_PAGE" >
+		<track category="LinkUsage" action="{ref}" label="{gotoPageId}" />
+	</action>
+	<action ref="GALLERY_BTN" gotoPageId="GALLERY_PAGE" >
 		<track category="LinkUsage" action="{ref}" label="{gotoPageId}" />
 	</action>
 	
@@ -18,6 +25,12 @@
 	
 	<!-- PAGES -->
 	<page id="HELLO_WORLD_PAGE" title="Hello World" address="HelloWorld" src="pages/HelloWorldPage.swf" >
+	</page>
+	
+	<page id="GALLERY_PAGE" title="Gallery" address="Gallery" src="pages/GalleryPage.swf" >
+		<data>
+			<images src="data/gallery.xml" />
+		</data>
 	</page>
 	
 	<!-- FOOTER LINKS -->

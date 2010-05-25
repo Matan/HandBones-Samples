@@ -1,4 +1,4 @@
-package org.handbones.samples.site.pages.helloworld 
+package org.handbones.samples.site.pages.helloworld.view 
 {
 	import assets.pages.HelloWorldCanvasFC;
 

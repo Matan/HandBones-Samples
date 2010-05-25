@@ -16,7 +16,7 @@ package org.handbones.samples.site.view
 		
 		override public function onRegister() : void 
 		{
-			actionMap.mapAction(view.helloWorldBtn, ActionRef.HELLO_WORLD_BTN, MouseEvent);
+			actionMap.mapAction(view.helloWorldBtn, ActionRef.HELLO_WORLD_BTN, MouseEvent);			actionMap.mapAction(view.galleryBtn, ActionRef.GALLERY_BTN, MouseEvent);
 			view.init();
 		}
 

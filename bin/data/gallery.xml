@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gallery src="images/gallery/" >
+	<image src="image_01.jpg" />
+	<image src="image_02.jpg" />
+	<image src="image_03.jpg" />
+	<image src="image_04.jpg" />
+	<image src="image_05.jpg" />
+	<image src="image_06.jpg" />
+	<image src="image_07.jpg" />
+	<image src="image_08.jpg" />
+	<image src="image_09.jpg" />
+	<image src="image_10.jpg" />
+	<image src="image_11.jpg" />
+	<image src="image_12.jpg" />
+	<image src="image_13.jpg" />
+	<image src="image_14.jpg" />
+	<image src="image_15.jpg" />
+</gallery>

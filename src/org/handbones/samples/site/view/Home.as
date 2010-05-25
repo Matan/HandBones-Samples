@@ -17,7 +17,7 @@ package org.handbones.samples.site.view
 		
 		public function init() : void
 		{
-			helloWorldBtn.buttonMode = true;
+			helloWorldBtn.buttonMode = true;			galleryBtn.buttonMode = true;
 		}
 
 		public function destroy(stage : Stage = null) : void
