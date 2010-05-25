@@ -46,7 +46,7 @@ package org.handbones.samples.site
 			//View Mapping
 			mediatorMap.mapView(SiteCanvas, SiteCanvasMediator);			mediatorMap.mapView(Background, BackgroundMediator);			mediatorMap.mapView(Header, HeaderMediator);			mediatorMap.mapView(Footer, FooterMediator);			mediatorMap.mapView(Home, HomeMediator);			mediatorMap.mapView(PageContainer, PageContainerMediator);
 			
-			dispatchEvent(new ContextEvent(ContextEvent.STARTUP));
+			super.startup();
 		}
 	}
 }
