@@ -1,5 +1,7 @@
 package org.handbones.samples.site.pages 
 {
+	import org.handbones.samples.site.pages.helloworld.controller.HelloWorldStartupCompleteCommand;
+	import org.handbones.events.PageEvent;
 	import org.handbones.samples.site.pages.helloworld.view.HelloWorldCanvas;
 	import org.handbones.samples.site.pages.helloworld.view.HelloWorldCanvasMediator;
 	import org.handbones.base.Page;
@@ -11,9 +13,9 @@ package org.handbones.samples.site.pages
 	{
 		override public function startup() : void 
 		{
-			mediatorMap.mapView(HelloWorldCanvas, HelloWorldCanvasMediator);
+			commandMap.mapEvent(PageEvent.STARTUP_COMPLETE, HelloWorldStartupCompleteCommand, PageEvent);
 			
-			addChild(new HelloWorldCanvas());
+			mediatorMap.mapView(HelloWorldCanvas, HelloWorldCanvasMediator);
 			
 			super.startup();
 		}

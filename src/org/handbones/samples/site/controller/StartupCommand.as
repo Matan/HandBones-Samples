@@ -1,7 +1,7 @@
 package org.handbones.samples.site.controller 
 {
+	import org.handbones.core.ISettingsService;
 	import org.handbones.samples.site.utils.FlashVars;
-	import org.handbones.services.ISettingsService;
 	import org.robotlegs.mvcs.Command;
 
 	import flash.display.StageAlign;

@@ -11,7 +11,7 @@ package org.handbones.samples.site.view
 
 		[Inject]
 		public var view : Background;
-
+		
 		override public function onRegister() : void 
 		{
 			eventMap.mapListener(eventDispatcher, SizeEvent.RESIZE, resize_handler, SizeEvent);

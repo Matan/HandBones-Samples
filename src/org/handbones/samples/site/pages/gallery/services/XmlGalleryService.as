@@ -64,7 +64,6 @@ package org.handbones.samples.site.pages.gallery.services
 		protected function error_handler(event : LoaderEvent) : void 
 		{
 			_busy = false;
-			trace(event.errorMessage);
 		}
 	}
 }

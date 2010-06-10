@@ -2,6 +2,8 @@ package org.handbones.samples.site.utils
 {
 	import mu.utils.FlashVarsDynamic;
 
+	import flash.display.DisplayObjectContainer;
+
 	/**
 	 * @author Matan Uberstein
 	 */
@@ -10,9 +12,11 @@ package org.handbones.samples.site.utils
 
 		public var settingsPath : String = "data/site.xml";
 
-		public function FlashVars(loaderInfoParams : Object)
+		[Inject]
+
+		public function FlashVars(contextView : DisplayObjectContainer)
 		{
-			super(loaderInfoParams);
+			super(contextView.stage.loaderInfo.parameters);
 		}
 	}
 }

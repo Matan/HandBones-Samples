@@ -5,6 +5,7 @@
 	<title prefix="" body="Root Page" suffix=" | HandBones" />
 	<tracker uid="UA-11057894-2" debug="false" />
 	<!-- <shell dispatchContextStartupComplete="true" /> -->
+	<!-- <loader connections="3" /> -->
 	
 	<data>
 		<handbones version="0.2.2" />
@@ -28,9 +29,7 @@
 	</page>
 	
 	<page id="GALLERY_PAGE" title="Gallery" address="Gallery" src="pages/GalleryPage.swf" >
-		<data>
-			<images src="data/gallery.xml" />
-		</data>
+		<asset id="GALLERY_XML" src="data/gallery.xml" />
 	</page>
 	
 	<!-- FOOTER LINKS -->

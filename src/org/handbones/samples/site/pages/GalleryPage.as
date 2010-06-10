@@ -1,13 +1,13 @@
 package org.handbones.samples.site.pages 
 {
-	import org.handbones.samples.site.pages.gallery.view.GalleryCanvasMediator;
-	import org.handbones.base.Page;
+	import org.handbones.samples.site.pages.gallery.controller.ParseGalleryXmlCommand;
 	import org.handbones.events.PageEvent;
-	import org.handbones.samples.site.pages.gallery.controller.UpdateGalleryDataCommand;
+	import org.handbones.base.Page;
 	import org.handbones.samples.site.pages.gallery.model.GalleryModel;
 	import org.handbones.samples.site.pages.gallery.services.IGalleryService;
 	import org.handbones.samples.site.pages.gallery.services.XmlGalleryService;
 	import org.handbones.samples.site.pages.gallery.view.GalleryCanvas;
+	import org.handbones.samples.site.pages.gallery.view.GalleryCanvasMediator;
 
 	/**
 	 * @author Matan Uberstein
@@ -16,7 +16,7 @@ package org.handbones.samples.site.pages
 	{
 		override public function startup() : void 
 		{
-			commandMap.mapEvent(PageEvent.STARTUP_COMPLETE, UpdateGalleryDataCommand, PageEvent);
+			commandMap.mapEvent(PageEvent.STARTUP_COMPLETE, ParseGalleryXmlCommand, PageEvent);
 			
 			injector.mapSingleton(GalleryModel);
 			

@@ -41,7 +41,7 @@ package org.handbones.samples.site
 			commandMap.mapEvent(SizeEvent.RESIZE, UpdatePageSizeCommand, SizeEvent);
 			
 			//Util mapping
-			injector.mapValue(FlashVars, new FlashVars(contextView.stage.loaderInfo.parameters));
+			injector.mapSingleton(FlashVars);
 			
 			//View Mapping
 			mediatorMap.mapView(SiteCanvas, SiteCanvasMediator);			mediatorMap.mapView(Background, BackgroundMediator);			mediatorMap.mapView(Header, HeaderMediator);			mediatorMap.mapView(Footer, FooterMediator);			mediatorMap.mapView(Home, HomeMediator);			mediatorMap.mapView(PageContainer, PageContainerMediator);
