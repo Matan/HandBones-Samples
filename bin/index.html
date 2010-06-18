@@ -2,9 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title>HandBones</title>
-		<link href="css/styles.css" rel="stylesheet" type="text/css" />
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-		<meta name="google-site-verification" content="0i_Hb5EUe9NRvvXlrscWTE62ascFYCLj0Fn9_wAh1OM" />
 		
 		<script type="text/javascript" src="javascripts/swfobject.js"></script>
 		<script type="text/javascript" src="javascripts/swfaddress.js?tracker=null"></script>
@@ -15,43 +13,42 @@
 		<script type="text/javascript">
 
 			//Common Values
-			var flashVersion = "10.0.0";
-			var swfId = "sampleSiteSWF";
-			var safeWidth = 1000;
+			var swfId = "flash-content-main";
+			var safeWidth = 800;
 			var safeHeight = 600;
+			var flashVersion = "10.0.0";
+			
 			//FlashVars
 			var _v = {};
-                _v.settingsPath = "data/site.xml";
+                //_v.siteXmlPath = "data/site.xml"; // site.xml location optional
+                
 			//Parameters
 			var _p = {};
 				_p.id = swfId; // Movie Identifier, needs value for JS support in IE
 				_p.name = _p.id; // Movie name, usually the same as the id
-				_p.swliveconnect = true; // true | false :: True if using JS from flash
-				_p.allowFullScreen = true; // true | false 
+				_p.base = "flash"; // Base path for loading external files with relative paths, excluding path given to FLV component.
 				_p.play = false; // true | false :: Auto play movie timeline
 				_p.menu = false; // true | false :: Context (right-click) menu
-				_p.quality = "high"; // low | autolow | meduim | high | autohigh | best :: 'Auto' switches anti-aliasing on/off according to framerate
+				_p.wmode = "gpu"; // window | opaque | transparent | direct | gpu
 				_p.scale = "default"; // default (show all) | noborder | exactfit
 				_p.align = ""; // l (left) | r (right) | t (top) | b (bottom)
 				_p.salign = "tl"; // l | t | r | b | tl | tr | bl | br :: Figure it out :)
-				_p.wmode = "gpu"; // window | opaque | transparent | direct | gpu
 				_p.bgcolor = "#FFFFFF"; // Background colour
-				_p.base = ""; // Base path for loading external files with relative paths, excluding path given to FLV component.
+				_p.quality = "high"; // low | autolow | meduim | high | autohigh | best :: 'Auto' switches anti-aliasing on/off according to framerate
+				_p.swliveconnect = true; // true | false :: True if using JS from flash
+				_p.allowFullScreen = true; // true | false 
 
-				//swfobject.embedSWF(swfUrlStr, replaceElemIdStr, widthStr, heightStr, 	swfVersionStr, xiSwfUrlStr, flashvarsObj, parObj, attObj, callbackFn);
-				swfobject.embedSWF("SampleSite.swf", "sampleSite-DIV", "100%", "100%", flashVersion, "", _v, _p, {id:_p.id, name:_p.name});
-				//swffit.fit(swfId, minWid, minHei, maxWid, maxHei, hCenter, vCenter);
-				swffit.fit(swfId, safeWidth, safeHeight);
+			//swfobject.embedSWF(swfUrlStr, replaceElemIdStr, widthStr, heightStr, 	swfVersionStr, xiSwfUrlStr, flashvarsObj, parObj, attObj, callbackFn);
+			swfobject.embedSWF("flash/SampleSite.swf", "swf-content", "100%", "100%", flashVersion, "", _v, _p, {id:_p.id, name:_p.name});
+
+			//swffit.fit(swfId, minWid, minHei, maxWid, maxHei, hCenter, vCenter);
+			swffit.fit(swfId, safeWidth, safeHeight);
 
 		</script>
 		
 	</head>
-<body>
-<div id="sampleSite-DIV">
-<h1>HandBones</h1>
-<h2>a lightweight pure AS3 framework that helps you develop and maintain AS3 driven websites.</h2>
-<span>You do not have the latest version of Adobe Flash Player installed. <a href="http://get.adobe.com/flashplayer/">Please download it here.</a><br/><br/>
-<a href="http://www.matanuberstein.co.za">Blog</a> | <a href="asdocs/index.html">AS-Docs</a> | <a href="http://www.robotlegs.org">Robotlegs</a></span>
-</div>
-</body>
+	<body>
+		<div id="swf-content">
+		</div>
+	</body>
 </html>

@@ -1,0 +1,331 @@
+<?xml version="1.0"?>
+<project name="HandBones-ANT-Tool" basedir="." default="compile-all">
+
+	<!-- set up a prefix for all environment variables -->
+	<property environment="env." />
+
+	<!-- System environment must contain FLEX_HOME variable that points to Flex SDK -->
+	<property name="FLEX_HOME" location="${env.FLEX_HOME}" />
+
+	<!-- import the settings -->
+	<property file="${basedir}/build.properties" />
+
+	<!-- set task defs -->
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="ant/ant-contrib.jar" />
+
+	<!-- setup some properties -->
+	<property name="cache.loc" location="${basedir}/cache" />
+	<property name="templates.loc" location="${basedir}/templates" />
+	<property name="temp.loc" location="${basedir}/temp" />
+
+	<!-- create automatic relavance -->
+	<property name="project.src.loc" location="${project}/${project.src}" />
+	<property name="project.bin.loc" location="${project}/${project.bin}" />
+	<property name="project.lib.loc" location="${project}/${project.lib}" />
+	
+	<property name="project.src.main.loc" location="${project.src.loc}/${project.src.main}" />
+	<property name="project.src.pages.loc" location="${project.src.loc}/${project.src.pages}" />
+	
+	<property name="project.bin.flash.loc" location="${project.bin.loc}/${project.bin.flash}" />
+	
+	<property name="project.bin.main.loc" location="${project.bin.flash.loc}/${project.bin.main}" />
+	<property name="project.bin.pages.loc" location="${project.bin.flash.loc}/${project.bin.pages}" />
+
+	<!-- check for fdt file -->
+	<available file="${project}/.settings/com.powerflasher.fdt.classpath" property="fdt.present" />
+
+	<target name="scaffhold-site">
+
+		<mkdir dir="${temp.loc}" />
+
+		<unzip dest="${temp.loc}" src="${templates.loc}/${html.template}" />
+
+		<var name="index.html" value="${temp.loc}/index.html" />
+
+		<available file="${index.html}" property="index.present" />
+
+		<throw unless="index.present" message="Template '${templates.loc}/${site.template}' does not contain an index.html file." />
+
+		<replace file="${index.html}" token="{p.title}" value="${html.title}" />
+		<replace file="${index.html}" token="{p.width}" value="${swf.width}" />
+		<replace file="${index.html}" token="{p.height}" value="${swf.height}" />
+		<replace file="${index.html}" token="{p.version}" value="${swf.target}" />
+
+		<propertyregex property="regexp.bin" input="${project.bin.loc}" regexp="([\[\]\\\^\$\.\|\?\*\+\(\)\-])" replace="\\\\\1" global="yes" override="yes" casesensitive="no" />
+		<propertyregex property="flash.base" input="${project.bin.flash.loc}" regexp="${regexp.bin}[\\/]" replace="" override="yes" casesensitive="no" />
+		<propertyregex property="flash.base" input="${flash.base}" regexp="\\" replace="/" global="yes" override="yes" casesensitive="no" />
+
+		<replace file="${index.html}" token="{p.flash.base}" value="${flash.base}" />
+
+		<basename file="${project.bin.main.loc}" property="main.swf" />
+
+		<replace file="${index.html}" token="{p.main.swf}" value="${flash.base}/${main.swf}" />
+
+		<copy todir="${project.bin.loc}" overwrite="no">
+			<fileset dir="${temp.loc}" includes="**/*.*" />
+		</copy>
+
+		<delete dir="${temp.loc}" />
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: CLEAR CACHE -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="clear-cache">
+		<delete dir="${cache.loc}" />
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: COMPILE-ALL -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="compile-all">
+
+		<!-- compile main -->
+		<antcall target="compile-main">
+			<param name="debug" value="${debug}" />
+		</antcall>
+
+		<!-- compile pages -->
+		<antcall target="compile-pages">
+			<param name="debug" value="${debug}" />
+		</antcall>
+
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: COMPILE-MAIN -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="compile-main">
+
+		<!-- check parameters -->
+		<if>
+			<isset property="debug" />
+			<else>
+				<echo>INFO: 'debug' parameter not set defaulting to '${default.debug}'</echo>
+				<property name="debug" value="${default.debug}" />
+			</else>
+		</if>
+
+		<!-- call compile -->
+		<antcall target="compile">
+			<param name="file" value="${project.src.main.loc}" />
+			<param name="output" value="${project.bin.main.loc}" />
+			<param name="debug" value="${debug}" />
+		</antcall>
+
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: COMPILE-PAGES -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="compile-pages">
+
+		<!-- check parameters -->
+		<if>
+			<isset property="debug" />
+			<else>
+				<echo>INFO: 'debug' parameter not set defaulting to '${default.debug}'</echo>
+				<property name="debug" value="${default.debug}" />
+			</else>
+		</if>
+
+		<!-- loop through pages -->
+		<for param="page.path">
+			<fileset dir="${project.src.pages.loc}" includes="*.as" />
+
+			<sequential>
+
+				<!-- extract base name and create output name -->
+				<var name="page.as" unset="true" />
+				<basename property="page.as" file="@{page.path}" />
+				<propertyregex override="yes" property="page.swf" input="${page.as}" regexp="\.as" replace=".swf" casesensitive="no" />
+
+				<!-- compile each page found -->
+				<antcall target="compile">
+					<param name="file" value="@{page.path}" />
+					<param name="output" value="${project.bin.pages.loc}/${page.swf}" />
+					<param name="debug" value="${debug}" />
+				</antcall>
+			</sequential>
+		</for>
+
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: COMPILE -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="compile">
+
+		<!-- check parameters -->
+		<if>
+			<and>
+				<isset property="file" />
+				<isset property="output" />
+				<isset property="debug" />
+			</and>
+			<then>
+
+				<!-- create a cache location -->
+				<mkdir dir="${cache.loc}" />
+
+				<!-- strip base name from path -->
+				<var name="output.name" unset="true" />
+				<basename property="output.name" file="${output}" />
+
+				<!-- run the compiler -->
+				<mxmlc file="${file}" output="${cache.loc}/${output.name}" incremental="true" target-player="${swf.target}" debug="${debug}" keep-generated-actionscript="false" static-link-runtime-shared-libraries="true">
+
+					<!-- add base source path -->
+					<compiler.source-path path-element="${project.src.loc}" />
+
+					<!-- set default dimensions -->
+					<default-size width="${swf.width}" height="${swf.height}" />
+
+					<!-- flex config -->
+					<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml" />
+
+					<!-- elements path -->
+					<source-path path-element="${FLEX_HOME}/frameworks" />
+
+					<!-- add libs recursively -->
+					<compiler.library-path dir="${project.lib.loc}" append="true">
+						<include name="**/*.swc" />
+					</compiler.library-path>
+
+				</mxmlc>
+
+				<!-- move swf to where it should be -->
+				<move tofile="${output}" overwrite="true">
+					<fileset file="${cache.loc}/${output.name}" />
+				</move>
+
+			</then>
+			<else>
+				<echo>ERROR: Parameters 'file', 'output' and 'debug' are not set.</echo>
+			</else>
+		</if>
+
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: REALESE -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="release">
+
+		<!-- compile -->
+		<antcall target="compile-all">
+			<param name="debug" value="false" />
+		</antcall>
+
+		<!-- run -->
+		<antcall target="run">
+			<param name="debug" value="false" />
+		</antcall>
+
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: DEBUG -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="debug">
+
+		<!-- compile -->
+		<antcall target="compile-all">
+			<param name="debug" value="true" />
+		</antcall>
+
+		<!-- run -->
+		<antcall target="run-debug" />
+
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: RUN-DEBUG -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="run-debug">
+
+		<!-- run -->
+		<antcall target="run">
+			<param name="player" value="${default.player}" />
+			<param name="debug" value="true" />
+		</antcall>
+
+	</target>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- TARGET: RUN -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<target name="run">
+
+		<!-- check parameters -->
+		<if>
+			<isset property="player" />
+			<elseif>
+				<isset property="fdt.present" />
+				<then>
+					<echo>INFO: 'player' parameter not set defaulting to '${default.player}'</echo>
+					<property name="player" value="${default.player}" />
+				</then>
+			</elseif>
+			<else>
+				<echo>INFO: 'player' parameter not set and fdt not detected, defaulting to 'adobe'</echo>
+				<property name="player" value="adobe" />
+			</else>
+		</if>
+
+		<if>
+			<isset property="debug" />
+			<else>
+				<echo>INFO: 'debug' parameter not set defaulting to '${default.debug}'</echo>
+				<property name="debug" value="${default.debug}" />
+			</else>
+		</if>
+
+		<!-- check for debugging mode -->
+		<if>
+			<and>
+				<isset property="fdt.present" />
+				<equals arg1="${debug}" arg2="true" />
+			</and>
+			<then>
+				<basename file="${project}" property="project.name" />
+				<fdt.startDebugger projectname="${project.name}" savelocation="${project}/.." />
+			</then>
+		</if>
+
+		<if>
+
+			<!-- use fdt -->
+			<and>
+				<isset property="fdt.present" />
+				<equals arg1="${player}" arg2="external" />
+			</and>
+			<then>
+				<fdt.extSWFViewer.startSWF file="${project.bin.main.loc}" width="${swf.width}" height="${swf.height}" />
+			</then>
+
+			<!-- use adobe -->
+			<elseif>
+
+				<!-- windows -->
+				<os family="windows" />
+				<then>
+					<exec executable="${flash.player}" vmlauncher="true" spawn="false" failonerror="true">
+						<arg line="${project.bin.main.loc}" />
+					</exec>
+				</then>
+			</elseif>
+
+			<else>
+
+				<!-- unix -->
+				<exec executable="open" vmlauncher="true" spawn="false" failonerror="true">
+					<arg line="-a '${flash.player}'" />
+					<arg line="${project.bin.main.loc}" />
+				</exec>
+			</else>
+		</if>
+	</target>
+
+</project>

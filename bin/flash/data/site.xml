@@ -8,7 +8,7 @@
 	<!-- <loader connections="3" /> -->
 	
 	<data>
-		<handbones version="0.2.2" />
+		<handbones version="0.5.0" />
 	</data>
 	
 	<!-- ROOT ACTIONS -->
