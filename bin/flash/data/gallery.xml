@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gallery src="images/gallery/" >
+<gallery src="../images/gallery/" >
 	<image src="image_01.jpg" />
 	<image src="image_02.jpg" />
 	<image src="image_03.jpg" />

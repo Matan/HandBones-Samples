@@ -1,7 +1,7 @@
 package org.handbones.samples.site.pages.helloworld.controller 
 {
-	import org.handbones.samples.site.pages.helloworld.view.HelloWorldCanvas;
 	import org.handbones.core.IPage;
+	import org.handbones.samples.site.pages.helloworld.view.HelloWorldCanvas;
 	import org.robotlegs.mvcs.Command;
 
 	/**

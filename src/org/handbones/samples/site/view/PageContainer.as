@@ -8,6 +8,7 @@ package org.handbones.samples.site.view
 	import org.handbones.core.IPage;
 	import org.libspark.betweenas3.BetweenAS3;
 	import org.libspark.betweenas3.easing.Back;
+	import org.libspark.betweenas3.tweens.ITween;
 
 	import flash.display.DisplayObject;
 	import flash.display.Stage;
@@ -60,16 +61,21 @@ package org.handbones.samples.site.view
 			_twn.reset();
 				
 			if(!_onScreen)
-					_twn.addTween(BetweenAS3.to(this, {scaleX:1, scaleY:1, alpha:1}, .3, Back.easeOut));
+				BetweenAS3.to(this, {scaleX:1, scaleY:1, alpha:1}, .3, Back.easeOut).play();
 				
 			if(previousPage)
-					_twn.addTween(BetweenAS3.to(previousPage, {alpha:0}, .3, Back.easeOut));
-								_twn.addTween(BetweenAS3.to(_currentPage, {alpha:1}, .3, Back.easeOut));
+			{
+				var outTwn : ITween = _twn.addTween(BetweenAS3.to(previousPage, {alpha:0}, .3, Back.easeOut));
 				
-			addChildAt(DisplayObject(_currentPage), getChildIndex(closeBtn));
-				
-			_twn.parallel();
-				
+				outTwn.onCompleteParams = [previousPage];
+				outTwn.onComplete = removePage;			}
+								var inTwn : ITween = _twn.addTween(BetweenAS3.to(_currentPage, {alpha:1}, .3, Back.easeOut));
+			
+			inTwn.onCompleteParams = [_currentPage];
+			inTwn.onComplete = addPage;
+
+			_twn.serial();
+			
 			updateClipping();
 				
 			_onScreen = true;
@@ -97,6 +103,20 @@ package org.handbones.samples.site.view
 			closeBtn.x = width;
 			
 			updateClipping();
+		}
+
+		protected function removePage(page : IPage) : void
+		{
+			var pageDisplayObject : DisplayObject = DisplayObject(page);
+			if(contains(pageDisplayObject))
+				removeChild(pageDisplayObject);
+		}
+
+		protected function addPage(page : IPage) : void
+		{
+			var pageDisplayObject : DisplayObject = DisplayObject(page);
+			if(!contains(pageDisplayObject))
+				addChildAt(pageDisplayObject, getChildIndex(closeBtn));
 		}
 
 		protected function updateClipping() : void

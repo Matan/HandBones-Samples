@@ -7,8 +7,29 @@
 	<!-- <shell dispatchContextStartupComplete="true" /> -->
 	<!-- <loader connections="3" /> -->
 	
+	<contextMenu hideDefault="true" zoom="false" quality="false" print="false" >
+		
+		<item caption="Hello World Page" separator="false" enabled="true" visible="true" >
+			<action gotoPageId="HELLO_WORLD_PAGE" >
+				<track category="LinkUsage" action="ContextMenu" label="{gotoPageId}" />
+			</action>
+		</item>
+		<item caption="Gallery Page" separator="false" enabled="true" visible="true" >
+			<action gotoPageId="GALLERY_PAGE" >
+				<track category="LinkUsage" action="ContextMenu" label="{gotoPageId}" />
+			</action>
+		</item>
+		
+		<item caption="HandBones on Github" separator="true" >
+			<action invokeUrl="http://github.com/Matan/HandBones" urlWindow="_blank" >
+				<track category="LinkUsage" action="ContextMenu" label="{invokeUrl}" />
+			</action>
+		</item>
+		
+	</contextMenu>
+	
 	<data>
-		<handbones version="0.5.0" />
+		<handbones version="0.7.0" />
 	</data>
 	
 	<!-- ROOT ACTIONS -->
@@ -36,7 +57,7 @@
 	<action ref="FOOTER_BLOG" invokeUrl="http://www.matanuberstein.co.za" window="_blank">
 		<track category="LinkUsage" action="{ref}" label="{invokeUrl}" />
 	</action>
-	<action ref="FOOTER_ASDOC" invokeUrl="asdocs/index.html" window="_blank">
+	<action ref="FOOTER_ASDOC" invokeUrl="../asdocs/index.html" window="_blank">
 		<track category="LinkUsage" action="{ref}" label="{invokeUrl}" />
 	</action>
 	<action ref="FOOTER_ROBOTLEGS" invokeUrl="http://www.robotlegs.org" window="_blank">
