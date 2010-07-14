@@ -4,10 +4,11 @@
 	<!-- SETTINGS -->
 	<title prefix="" body="Root Page" suffix=" | HandBones" />
 	<tracker uid="UA-11057894-2" debug="false" />
+	<actionMap showStatus="true" />
 	<!-- <shell dispatchContextStartupComplete="true" /> -->
 	<!-- <loader connections="3" /> -->
 	
-	<contextMenu hideDefault="true" zoom="false" quality="false" print="false" >
+	<contextMenu >
 		
 		<item caption="Hello World Page" separator="false" enabled="true" visible="true" >
 			<action gotoPageId="HELLO_WORLD_PAGE" >
@@ -29,7 +30,7 @@
 	</contextMenu>
 	
 	<data>
-		<handbones version="0.7.0" />
+		<handbones version="0.7.4" />
 	</data>
 	
 	<!-- ROOT ACTIONS -->
@@ -40,18 +41,21 @@
 		<track category="LinkUsage" action="{ref}" label="{gotoPageId}" />
 	</action>
 	
+	<action event="INVALID_ADDRESS" gotoPageId="NOT_FOUND_PAGE" keepHistory="true" />
+	
 	<!-- COMMON ACTIONS -->
 	<action ref="GOTO_ROOT" changeAddress="/" >
 		<track category="LinkUsage" action="{ref}" label="CommonLink" />
 	</action>
 	
 	<!-- PAGES -->
-	<page id="HELLO_WORLD_PAGE" title="Hello World" address="HelloWorld" src="pages/HelloWorldPage.swf" >
-	</page>
+	<page id="HELLO_WORLD_PAGE" title="Hello World" address="Hello-World" src="pages/HelloWorldPage.swf" />
 	
 	<page id="GALLERY_PAGE" title="Gallery" address="Gallery" src="pages/GalleryPage.swf" >
 		<asset id="GALLERY_XML" src="data/gallery.xml" />
 	</page>
+	
+	<page id="NOT_FOUND_PAGE" title="404 Not Found" address="404-Not-Found" src="pages/NotFoundPage.swf" loadOnDemand="true" />
 	
 	<!-- FOOTER LINKS -->
 	<action ref="FOOTER_BLOG" invokeUrl="http://www.matanuberstein.co.za" window="_blank">

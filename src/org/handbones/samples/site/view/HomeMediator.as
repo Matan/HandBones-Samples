@@ -1,5 +1,6 @@
 package org.handbones.samples.site.view 
 {
+	import org.handbones.core.INavigator;
 	import org.handbones.mvcs.RootActionMediator;
 	import org.handbones.samples.site.model.ids.ActionRef;
 
@@ -13,10 +14,14 @@ package org.handbones.samples.site.view
 
 		[Inject]
 		public var view : Home;
-		
+
+		[Inject]
+		public var navigator : INavigator;
+
 		override public function onRegister() : void 
 		{
 			actionMap.mapAction(view.helloWorldBtn, ActionRef.HELLO_WORLD_BTN, MouseEvent);			actionMap.mapAction(view.galleryBtn, ActionRef.GALLERY_BTN, MouseEvent);
+			
 			view.init();
 		}
 

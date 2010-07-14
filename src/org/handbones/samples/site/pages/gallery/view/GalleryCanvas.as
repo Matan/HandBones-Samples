@@ -3,10 +3,13 @@ package org.handbones.samples.site.pages.gallery.view
 	import mu.display.IStandardView;
 	import mu.display.image.Image;
 
+	import org.handbones.samples.site.pages.gallery.events.GalleryCanvasEvent;
+
 	import flash.display.ISprite;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.net.URLRequest;
 
 	/**
@@ -25,6 +28,8 @@ package org.handbones.samples.site.pages.gallery.view
 		protected var _images : Array;
 		protected var _loadedIndexCounter : int;
 
+		protected var _imageContainer : Sprite; 
+
 		public function GalleryCanvas()
 		{
 		}
@@ -33,6 +38,10 @@ package org.handbones.samples.site.pages.gallery.view
 		{
 			_images = [];
 			_loadedIndexCounter = -1;
+			
+			_imageContainer = new Sprite();
+			_imageContainer.x = _hPadding;			_imageContainer.y = _vPadding;
+			addChild(_imageContainer);
 		}
 
 		public function destroy(stage : Stage = null) : void
@@ -47,8 +56,8 @@ package org.handbones.samples.site.pages.gallery.view
 			{
 				var image : Image = _images[i];
 				image.removeEventListener(Event.COMPLETE, image_complete_handler);
-				if(contains(image))
-					removeChild(image);
+				if(_imageContainer.contains(image))
+					_imageContainer.removeChild(image);
 				
 				image.clear();
 			}
@@ -67,7 +76,9 @@ package org.handbones.samples.site.pages.gallery.view
 			{
 				var image : Image = new Image();
 				image.width = _imageWidth;
-				image.addEventListener(Event.COMPLETE, image_complete_handler);
+				image.addEventListener(Event.COMPLETE, image_complete_handler);				image.addEventListener(MouseEvent.CLICK, image_click_handler);
+				image.enabled = true;
+				image.buttonMode = true;
 				
 				_images.push(image);
 			}
@@ -77,9 +88,20 @@ package org.handbones.samples.site.pages.gallery.view
 			loadNextImage();
 		}
 
+		public function showImage(index : int) : void
+		{
+		}
+
+		protected function image_click_handler(event : MouseEvent) : void 
+		{
+			var galleryEvent : GalleryCanvasEvent = new GalleryCanvasEvent(GalleryCanvasEvent.IMAGE_CLICKED);
+			galleryEvent.imageIndex = _images.indexOf(event.currentTarget);
+			dispatchEvent(galleryEvent);
+		}
+
 		protected function image_complete_handler(event : Event) : void 
 		{
-			addChild(_images[_loadedIndexCounter]);
+			_imageContainer.addChild(_images[_loadedIndexCounter]);
 			loadNextImage();
 		}
 
@@ -98,8 +120,8 @@ package org.handbones.samples.site.pages.gallery.view
 			_width = width;
 			_height = height;
 			
-			var xPos : Number = _hPadding;
-			var yPos : Number = _vPadding;
+			var xPos : Number = 0;
+			var yPos : Number = 0;
 			
 			var pL : int = _images.length;
 			for(var i : int = 0;i < pL;i++) 
@@ -110,9 +132,9 @@ package org.handbones.samples.site.pages.gallery.view
 				image.y = yPos;
 				
 				xPos += _imageWidth + _hPadding;
-				if(xPos + _imageWidth > _width)
+				if(xPos + _imageWidth >= _width)
 				{
-					xPos = _hPadding;
+					xPos = 0;
 					yPos += _imageHeight + _vPadding;
 				}
 			}
