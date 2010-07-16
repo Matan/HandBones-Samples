@@ -7,6 +7,7 @@ package org.handbones.samples.site.controller
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.net.URLRequest;
+	import flash.text.Font;
 
 	/**
 	 * @author Matan Uberstein
@@ -25,6 +26,8 @@ package org.handbones.samples.site.controller
 			contextView.stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			settingsService.load(new URLRequest(flashvars.settingsPath));
+			
+			Font.registerFont(HelveticaNormal);
 		}
 	}
 }

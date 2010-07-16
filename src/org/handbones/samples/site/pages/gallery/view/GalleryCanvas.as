@@ -2,8 +2,10 @@ package org.handbones.samples.site.pages.gallery.view
 {
 	import mu.display.IStandardView;
 	import mu.display.image.Image;
+	import mu.tweens.TweenBundle;
 
 	import org.handbones.samples.site.pages.gallery.events.GalleryCanvasEvent;
+	import org.libspark.betweenas3.BetweenAS3;
 
 	import flash.display.ISprite;
 	import flash.display.Sprite;
@@ -28,7 +30,9 @@ package org.handbones.samples.site.pages.gallery.view
 		protected var _images : Array;
 		protected var _loadedIndexCounter : int;
 
-		protected var _imageContainer : Sprite; 
+		protected var _imageContainer : Sprite;
+
+		protected var _fadeTwn : TweenBundle;
 
 		public function GalleryCanvas()
 		{
@@ -36,6 +40,8 @@ package org.handbones.samples.site.pages.gallery.view
 
 		public function init() : void
 		{
+			_fadeTwn = new TweenBundle();
+			
 			_images = [];
 			_loadedIndexCounter = -1;
 			
@@ -46,6 +52,9 @@ package org.handbones.samples.site.pages.gallery.view
 
 		public function destroy(stage : Stage = null) : void
 		{
+			_fadeTwn.reset();
+			_fadeTwn = null;
+			
 			destroyImages();
 		}
 
@@ -90,6 +99,15 @@ package org.handbones.samples.site.pages.gallery.view
 
 		public function showImage(index : int) : void
 		{
+			_fadeTwn.reset();
+			
+			var pL : int = _imagePaths.length;
+			for(var i : int = 0;i < pL;i++) 
+			{
+				var image : Image = _images[i];
+				_fadeTwn.addTween(BetweenAS3.to(image, {alpha:(i == index) ? 1 : .3}, .3));
+			}
+			_fadeTwn.parallel();
 		}
 
 		protected function image_click_handler(event : MouseEvent) : void 

@@ -1,5 +1,6 @@
 package org.handbones.samples.site.pages.gallery.view 
 {
+	import org.handbones.events.NavigatorEvent;
 	import org.handbones.core.INavigator;
 	import org.handbones.events.SizeEvent;
 	import org.handbones.model.SizeModel;
@@ -24,13 +25,14 @@ package org.handbones.samples.site.pages.gallery.view
 
 		[Inject]
 		public var sizeModel : SizeModel;
-		
+
 		[Inject]
 		public var navigator : INavigator;
 
 		override public function onRegister() : void 
 		{
 			eventMap.mapListener(eventDispatcher, SizeEvent.PAGE_RESIZE, pageResize_hanlder, SizeEvent);
+			eventMap.mapListener(eventDispatcher, NavigatorEvent.ADDRESS_CHANGE, addressChange_handler, NavigatorEvent);
 			
 			view.init();
 			
@@ -39,7 +41,10 @@ package org.handbones.samples.site.pages.gallery.view
 			view.setSize(sizeModel.pageWidth, sizeModel.pageHeight);
 			
 			if(model.hasData)
+			{
 				view.imagePaths = model.imagePaths;
+				showImage();
+			}
 			else
 				eventMap.mapListener(eventDispatcher, GalleryModelEvent.UPDATED, modelUpdated_handler, GalleryModelEvent);
 		}
@@ -49,11 +54,23 @@ package org.handbones.samples.site.pages.gallery.view
 			view.destroy(contextView.stage);
 		}
 
+		protected function showImage() : void
+		{
+			var vrs : URLVariables = navigator.getUrlVariables();
+			
+			if(vrs.selectedImage)
+				view.showImage(vrs.selectedImage);
+		}
+
+		protected function addressChange_handler(event : NavigatorEvent) : void 
+		{
+			showImage();
+		}
+
 		protected function imageClicked_handler(event : GalleryCanvasEvent) : void 
 		{
 			var vrs : URLVariables = navigator.getUrlVariables();
 			vrs.selectedImage = event.imageIndex;
-			trace('vrs: ' + (vrs));
 			
 			navigator.setUrlVariables(vrs);
 		}
@@ -61,6 +78,7 @@ package org.handbones.samples.site.pages.gallery.view
 		protected function modelUpdated_handler(event : GalleryModelEvent) : void 
 		{
 			view.imagePaths = model.imagePaths;
+			showImage();
 		}
 
 		protected function pageResize_hanlder(event : SizeEvent) : void 

@@ -4,12 +4,22 @@
 	<!-- SETTINGS -->
 	<title prefix="" body="Root Page" suffix=" | HandBones" />
 	<tracker uid="UA-11057894-2" debug="false" />
-	<actionMap showStatus="true" />
 	<!-- <shell dispatchContextStartupComplete="true" /> -->
+	<!-- <actionMap showStatus="true" /> -->
 	<!-- <loader connections="3" /> -->
 	
+	<cookies name="HB-Sample-Site" >
+		<cookie id="sample-string" value="some-string" />
+		<cookie id="sample-boolean" value="false" type="boolean" />
+		<cookie id="sample-uint" value="1234" type="uint" />
+		<cookie id="sample-int" value="-1234" type="int" />
+		<cookie id="sample-number" value="12.34" type="number" />
+		<cookie id="sample-array" value="e1,e2,e3,e4" type="array" />
+		<cookie id="sample-reset-uint" value="0" type="uint" reset="true" />
+		<cookie id="visit-count" value="0" type="uint" />
+	</cookies>
+	
 	<contextMenu >
-		
 		<item caption="Hello World Page" separator="false" enabled="true" visible="true" >
 			<action gotoPageId="HELLO_WORLD_PAGE" >
 				<track category="LinkUsage" action="ContextMenu" label="{gotoPageId}" />
@@ -20,17 +30,23 @@
 				<track category="LinkUsage" action="ContextMenu" label="{gotoPageId}" />
 			</action>
 		</item>
-		
 		<item caption="HandBones on Github" separator="true" >
 			<action invokeUrl="http://github.com/Matan/HandBones" urlWindow="_blank" >
 				<track category="LinkUsage" action="ContextMenu" label="{invokeUrl}" />
 			</action>
 		</item>
-		
 	</contextMenu>
 	
 	<data>
-		<handbones version="0.7.4" />
+		<handbones version="0.7.5" />
+		
+		<rootButtons>
+			<button label="Hello World" action="HELLO_WORLD_BTN" />
+			<button label="Gallery" action="GALLERY_BTN" />
+			<button label="Cookie Tester" action="COOKIE_TESTER_BTN" />
+			<button label="404 - Not Found" action="NOT_FOUND_BTN" />
+		</rootButtons>
+		
 	</data>
 	
 	<!-- ROOT ACTIONS -->
@@ -40,8 +56,14 @@
 	<action ref="GALLERY_BTN" gotoPageId="GALLERY_PAGE" >
 		<track category="LinkUsage" action="{ref}" label="{gotoPageId}" />
 	</action>
+	<action ref="COOKIE_TESTER_BTN" gotoPageId="COOKIE_TESTER_PAGE" >
+		<track category="LinkUsage" action="{ref}" label="{gotoPageId}" />
+	</action>
+	<action ref="NOT_FOUND_BTN" gotoPageId="NOT_FOUND_PAGE" >
+		<track category="LinkUsage" action="{ref}" label="{gotoPageId}" />
+	</action>
 	
-	<action event="INVALID_ADDRESS" gotoPageId="NOT_FOUND_PAGE" keepHistory="true" />
+	<action event="INVALID_ADDRESS" gotoPageId="NOT_FOUND_PAGE" keepHistory="false" />
 	
 	<!-- COMMON ACTIONS -->
 	<action ref="GOTO_ROOT" changeAddress="/" >
@@ -49,13 +71,18 @@
 	</action>
 	
 	<!-- PAGES -->
-	<page id="HELLO_WORLD_PAGE" title="Hello World" address="Hello-World" src="pages/HelloWorldPage.swf" />
+	<page id="HELLO_WORLD_PAGE" title="Hello World" address="Hello-World" src="pages/HelloWorldPage.swf" >
+	</page>
 	
 	<page id="GALLERY_PAGE" title="Gallery" address="Gallery" src="pages/GalleryPage.swf" >
 		<asset id="GALLERY_XML" src="data/gallery.xml" />
 	</page>
 	
-	<page id="NOT_FOUND_PAGE" title="404 Not Found" address="404-Not-Found" src="pages/NotFoundPage.swf" loadOnDemand="true" />
+	<page id="COOKIE_TESTER_PAGE" title="Cookie Tester" address="Cookie-Tester" src="pages/CookieTesterPage.swf" >
+	</page>
+	
+	<page id="NOT_FOUND_PAGE" title="404 Not Found" address="404-Not-Found" src="pages/NotFoundPage.swf" loadOnDemand="true" >
+	</page>
 	
 	<!-- FOOTER LINKS -->
 	<action ref="FOOTER_BLOG" invokeUrl="http://www.matanuberstein.co.za" window="_blank">

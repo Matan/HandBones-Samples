@@ -11,8 +11,8 @@ package org.handbones.samples.site.view
 	public class SiteCanvas extends Sprite implements IStandardView
 	{
 		protected var _bg : Background;
-		protected var _header : Header;		protected var _home : Home;
-		protected var _pageContainer : PageContainer;
+		protected var _header : Header;
+		protected var _rootButtons : RootButtons;		protected var _pageContainer : PageContainer;
 		protected var _footer : Footer;
 
 		public function SiteCanvas()
@@ -27,9 +27,10 @@ package org.handbones.samples.site.view
 			_header = new Header();
 			addChild(_header);
 			
-			_home = new Home();
-			_home.y = 80;
-			addChild(_home);
+			_rootButtons = new RootButtons();
+			_rootButtons.x = 20;
+			_rootButtons.y = 100;
+			addChild(_rootButtons);
 			
 			_pageContainer = new PageContainer();
 			_pageContainer.x = 10;
@@ -38,6 +39,11 @@ package org.handbones.samples.site.view
 			
 			_footer = new Footer();
 			addChild(_footer);		}
+
+		protected function createButtons() : void
+		{
+			
+		}
 
 		public function destroy(stage : Stage = null) : void
 		{

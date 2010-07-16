@@ -1,5 +1,7 @@
 package org.handbones.samples.site 
 {
+	import org.handbones.samples.site.view.RootButtonsMediator;
+	import org.handbones.samples.site.view.RootButtons;
 	import org.handbones.events.SizeEvent;
 	import org.handbones.mvcs.HandBonesContext;
 	import org.handbones.samples.site.controller.StartupCommand;
@@ -12,8 +14,6 @@ package org.handbones.samples.site
 	import org.handbones.samples.site.view.FooterMediator;
 	import org.handbones.samples.site.view.Header;
 	import org.handbones.samples.site.view.HeaderMediator;
-	import org.handbones.samples.site.view.Home;
-	import org.handbones.samples.site.view.HomeMediator;
 	import org.handbones.samples.site.view.PageContainer;
 	import org.handbones.samples.site.view.PageContainerMediator;
 	import org.handbones.samples.site.view.SiteCanvas;
@@ -44,7 +44,7 @@ package org.handbones.samples.site
 			injector.mapSingleton(FlashVars);
 			
 			//View Mapping
-			mediatorMap.mapView(SiteCanvas, SiteCanvasMediator);			mediatorMap.mapView(Background, BackgroundMediator);			mediatorMap.mapView(Header, HeaderMediator);			mediatorMap.mapView(Footer, FooterMediator);			mediatorMap.mapView(Home, HomeMediator);			mediatorMap.mapView(PageContainer, PageContainerMediator);
+			mediatorMap.mapView(SiteCanvas, SiteCanvasMediator);			mediatorMap.mapView(Background, BackgroundMediator);			mediatorMap.mapView(Header, HeaderMediator);			mediatorMap.mapView(RootButtons, RootButtonsMediator);			mediatorMap.mapView(Footer, FooterMediator);			mediatorMap.mapView(PageContainer, PageContainerMediator);
 			
 			super.startup();
 		}
